@@ -98,6 +98,18 @@ body {
   margin: 0;
 }
 
+.logo {
+  width: max-content;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+}
+
+.logo > svg {
+  height: 24px;
+}
+
 .btn {
   background-color: var(--tw-color1);
   outline: none;
@@ -108,4 +120,32 @@ body {
   border-radius: 999px;
   font-size: 1.25rem;
   font-weight: 600;
+  cursor: pointer;
+
+  transition: background-color 300ms ease-in-out;
+  transform-origin: center;
+}
+
+.btn:hover {
+  background-color: var(--tw-color1-hover);
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.address {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+h2 {
+  font-size: 2rem;
 }
