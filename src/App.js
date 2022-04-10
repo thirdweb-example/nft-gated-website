@@ -1,18 +1,11 @@
-import {
-  useAddress,
-  useMetamask,
-  useNFTDrop,
-} from "@thirdweb-dev/react";
+import { useAddress, useMetamask, useNFTDrop } from "@thirdweb-dev/react";
 import { useState, useEffect } from "react";
-import Header from "./header";
 import "./styles.css";
 
 export default function App() {
   const address = useAddress();
   const connectWithMetamask = useMetamask();
-  const nftDrop = useNFTDrop(
-    "0x022c29E13D181548BB3d1cE387D00e53a476A391"
-  );
+  const nftDrop = useNFTDrop("0x022c29E13D181548BB3d1cE387D00e53a476A391");
   const [hasClaimedNFT, setHasClaimedNFT] = useState(false);
   const [isClaiming, setIsClaiming] = useState(false);
 
@@ -49,10 +42,7 @@ export default function App() {
 
   if (!address) {
     return (
-      <button
-        className="btn connect-metamask"
-        onClick={connectWithMetamask}
-      >
+      <button className="btn connect-metamask" onClick={connectWithMetamask}>
         Connect with Metamask
       </button>
     );
@@ -61,7 +51,6 @@ export default function App() {
   if (hasClaimedNFT) {
     return (
       <>
-        <Header />
         <h2>🎉 You have a membership NFT! 🎉</h2>
       </>
     );
@@ -73,22 +62,12 @@ export default function App() {
 
   return (
     <>
-      <Header />
-      <div className="container">
-        <p className="address">
-          Your address:{" "}
-          <span className="value">
-            {truncateAddress(address)}
-          </span>
-        </p>
-        <button
-          className="btn mint"
-          disabled={isClaiming}
-          onClick={mintNft}
-        >
-          Mint NFT
-        </button>
-      </div>
+      <p className="address">
+        Your address: <span className="value">{truncateAddress(address)}</span>
+      </p>
+      <button className="btn mint" disabled={isClaiming} onClick={mintNft}>
+        Mint NFT
+      </button>
     </>
   );
 }
