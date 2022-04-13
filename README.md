@@ -12,7 +12,7 @@ our guide on [How to create an NFT-gated website](https://portal.thirdweb.com/gu
 
 ## Installation
 
-First, intall the required dependencies:
+First, install the required dependencies:
 
 ```bash
 npm install
