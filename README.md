@@ -1,18 +1,21 @@
-
 # NFT Gated Website
 
-"One of the more dynamic use cases for NFTs is using them as a membership pass to the NFT holders. Let’s assume you want to create a website for your community that is gated by having access to a specific NFT from a collection..."
+This project demonstrates how you can restrict content on your website to only those users who own an NFT from your collection.
 
-An NFT Gated Website starter template created using thirdweb's React SDK. Follow along with this repository on 
-our guide on [How to create an NFT-gated website](https://portal.thirdweb.com/guides/nft-gated-website)
-## Preview
+We use an [NFT Drop](https://portal.thirdweb.com/pre-built-contracts/nft-drop) contract to enable users to claim one of the NFTs, and show users the restricted content once we detect they have at least one of the NFTs claimed.
 
-![App Screenshot](https://portal.thirdweb.com/assets/portal/guides/nft-gated-website/welcome-screen.png)
+## Tools:
 
+- [thirdweb React SDK](https://docs.thirdweb.com/react): To access hooks such as [useAddress](https://portal.thirdweb.com/react/react.useaddress) to view the connected wallet address, [useMetamask](https://portal.thirdweb.com/react/react.usemetamask) to connect user's wallets, and [useNFTDrop](https://portal.thirdweb.com/react/react.usenftdrop#usenftdrop-function) to interact with the NFT Drop we deployed via the [dashboard](https://thirdweb.com/dashboard).
+- [thirdweb TypeScript SDK](https://docs.thirdweb.com/typescript): We're using the [ThirdwebProvider](https://docs.thirdweb.com/react) to configure the Network we want our user's to be on, and to check the NFTs that the user owns from our collection using the [getOwned](https://portal.thirdweb.com/pre-built-contracts/nft-drop#nfts-owned-by-a-specific-wallet) function.
 
-## Installation
+## Using This Repo
 
-First, install the required dependencies:
+- Create an NFT Drop contract via the thirdweb dashboard on the Polygon Mumbai (MATIC) test network. You can use our [NFT Drop documentation](https://portal.thirdweb.com/pre-built-contracts/nft-drop#create-an-nft-drop-contract) to help guide you through this.
+
+- Clone this repository.
+
+- Replace the address in `useNFTDrop` with your NFT Drop contract address from the dashboard.
 
 ```bash
 npm install
@@ -20,34 +23,66 @@ npm install
 yarn install
 ```
 
-Then, run the development server:
+- Run the development server:
 
 ```bash
-npm start
+npm run start
 # or
 yarn start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Visit http://localhost:3000/ to view the demo.
 
-You can start editing the page by modifying `src/index.js` and `src/App.js`. The page auto-updates as you edit the file.
+# Guide
 
-On `src/index.js`, you'll find our `ThirdwebProvider` wrapping your app, this is necessary for our hooks to work.
+## Setting Up Magic Link WalletConnector
 
-on `src/App.js`, you'll find the `useMetamask` hook that we use to connect the user's wallet to MetaMask, `useDisconnect` that we use to disconnect it, and `useAddress` to check the user's wallet address once connected. 
-    
-## Learn More
+Inside [index.js](./src/index.js), we are wrapping our application with the [ThirdwebProvider](https://docs.thirdweb.com/react) component, which allows us to configure the **Network** we want our user's to be on, which we have set to `ChainId.Mumbai` in this demo.
 
-To learn more about thirdweb, React and CRA, take a look at the following resources:
+```tsx
+<ThirdwebProvider desiredChainId={activeChainId} walletConnectors={connectors}>
+  <Component {...pageProps} />
+</ThirdwebProvider>
+```
 
-- [thirdweb React Documentation](https://docs.thirdweb.com/react) - learn about our React SDK.
-- [thirdweb TypeScript Documentation](https://docs.thirdweb.com/react) - learn about our JavaScript/TypeScript SDK.
-- [thirdweb Portal](https://docs.thirdweb.com/react) - check our guides and development resources.
-- [Create React App Documentation](https://facebook.github.io/create-react-app/docs/getting-started) - learn about CRA features.
-- [React documentation](https://reactjs.org/) - learn React.
+This allows us to access all of the React SDK's hooks throughout our application.
 
-You can check out [the thirdweb GitHub organization](https://github.com/thirdweb-dev) - your feedback and contributions are welcome!
+## Connecting User's Wallets
 
-## Feedback
+We're using the [useMetamask](https://portal.thirdweb.com/react/react.usemetamask) hook to connect user's MetaMask wallets.
+
+```tsx
+const connectWithMetamask = useMetamask();
+```
+
+We can detect when a user's wallet is connected to the site using the [useAddress](https://portal.thirdweb.com/react/react.useaddress) hook.
+
+```tsx
+const address = useAddress();
+```
+
+If the `address` is undefined, we show the user a welcome page, and ask them to connect with their MetaMask wallet.
+
+## Checking User's NFTs
+
+We use the Typescript SDK to check the user's NFTs using the [getOwned](https://portal.thirdweb.com/pre-built-contracts/nft-drop#nfts-owned-by-a-specific-wallet) function.
+
+```tsx
+const nfts = await nftDrop.getOwned(address);
+```
+
+If the user has at least one NFT, we show the user the restricted content!
+
+## Minting a new NFT
+
+When the user doesn't have an NFT from our collection in their connected wallet, we show them a page that allows them to mint a new NFT.
+
+We use the [claim](https://portal.thirdweb.com/pre-built-contracts/nft-drop#minting--claiming-nfts) function to mint a new NFT for the user.
+
+```tsx
+await nftDrop.claim(1); // 1 is the quantity of NFTs to mint
+```
+
+## Join our Discord!
 
 For any questions, suggestions, join our discord at [https://discord.gg/thirdweb](https://discord.gg/thirdweb).
