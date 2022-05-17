@@ -79,7 +79,7 @@ export default function App() {
   if (!address) {
     return (
       <div className="container">
-        <h1>Welcome to the Cookie Club</h1>
+        <h1>Welcome to the Shape Club</h1>
         <button className="btn" onClick={connectWithMetamask}>
           Connect MetaMask
         </button>
@@ -99,7 +99,7 @@ export default function App() {
   if (hasClaimedNFT) {
     return (
       <div>
-        <h2>Congratulations! You have a Cookie NFT! 🍪</h2>
+        <h2>Congratulations! You have a Shape NFT! 🟦🔺🟣</h2>
       </div>
     );
   }
@@ -108,7 +108,7 @@ export default function App() {
   return (
     <div className="container">
       <p className="address">
-        There are no Cookie NFTs held by:{" "}
+        There are no Shape NFTs held by:{" "}
         <span className="value">{truncateAddress(address)}</span>
       </p>
       <button className="btn" disabled={isClaiming} onClick={mintNft}>
