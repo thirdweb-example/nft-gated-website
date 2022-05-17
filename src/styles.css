@@ -53,28 +53,50 @@ body {
   height: 24px;
 }
 
-.btn {
-  background-color: var(--tw-color1);
-  outline: none;
-  border: none;
-  color: var(--white);
-  height: 48px;
-  padding: 0 24px;
-  border-radius: 999px;
-  font-size: 1.25rem;
-  font-weight: 600;
-  cursor: pointer;
+.container {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+}
 
-  transition: background-color 300ms ease-in-out;
-  transform-origin: center;
+.btn {
+  cursor: pointer;
+  display: inline-flex;
+  appearance: none;
+  align-items: center;
+  -webkit-box-align: center;
+  justify-content: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  line-height: 1.2;
+  font-weight: 600;
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform;
+  transition-duration: 200ms;
+  height: 3rem;
+  min-width: 3rem;
+  font-size: 1rem;
+  background: #e5e5ea;
+  background-image: linear-gradient(to left, #cc25b3 0%, #418dff 101.52%);
+  color: #fff;
+  width: 180px;
+  text-align: center;
+  border-radius: 9999px;
+  border-style: none;
 }
 
 .btn:hover {
-  background-color: var(--tw-color1-hover);
+  opacity: 0.8;
 }
 
-.btn:active {
-  transform: scale(0.95);
+.btn:disabled {
+  opacity: 0.5;
 }
 
 .address {
