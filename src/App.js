@@ -1,10 +1,10 @@
 import {
   useAddress,
   useMetamask,
-  useNFTDrop,
   useNetworkMismatch,
   ChainId,
   useNetwork,
+  useEditionDrop,
 } from "@thirdweb-dev/react";
 
 import { useState, useEffect } from "react";
@@ -23,7 +23,9 @@ export default function App() {
   const [, switchNetwork] = useNetwork(); // Switch network
 
   // Replace this address with your NFT Drop address!
-  const nftDrop = useNFTDrop("0x322067594DBCE69A9a9711BC393440aA5e3Aaca1");
+  const editionDrop = useEditionDrop(
+    "0x1fCbA150F05Bbe1C9D21d3ab08E35D682a4c41bF"
+  );
   const [checking, setChecking] = useState(true);
   const [hasClaimedNFT, setHasClaimedNFT] = useState(false);
   const [isClaiming, setIsClaiming] = useState(false);
@@ -36,7 +38,7 @@ export default function App() {
 
     const checkBalance = async () => {
       try {
-        const nfts = await nftDrop.getOwned(address);
+        const nfts = await editionDrop.getOwned(address);
         setHasClaimedNFT(nfts?.length > 0);
         setChecking(false);
         setIsClaiming(false);
@@ -48,7 +50,13 @@ export default function App() {
       }
     };
     checkBalance();
-  }, [address, connectWithMetamask, networkMismatched, nftDrop, switchNetwork]);
+  }, [
+    address,
+    connectWithMetamask,
+    networkMismatched,
+    editionDrop,
+    switchNetwork,
+  ]);
 
   const mintNft = async () => {
     try {
@@ -65,7 +73,7 @@ export default function App() {
       }
 
       setIsClaiming(true);
-      await nftDrop.claim(1);
+      await editionDrop.claim(0, 1);
       setHasClaimedNFT(true);
     } catch (error) {
       setHasClaimedNFT(false);
@@ -99,7 +107,7 @@ export default function App() {
   if (hasClaimedNFT) {
     return (
       <div>
-        <h2>Congratulations! You have a Shape NFT! 🟦🔺🟣</h2>
+        <h2>Congratulations! You have a Shape Membership Card! 🟦🔺🟣</h2>
       </div>
     );
   }
@@ -108,7 +116,7 @@ export default function App() {
   return (
     <div className="container">
       <p className="address">
-        There are no Shape NFTs held by:{" "}
+        There are no Shape Membership Card NFTs held by:{" "}
         <span className="value">{truncateAddress(address)}</span>
       </p>
       <button className="btn" disabled={isClaiming} onClick={mintNft}>
