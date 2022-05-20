@@ -45,7 +45,6 @@ export default function App() {
       } catch (error) {
         setHasClaimedNFT(false);
         setChecking(false);
-        alert(error);
         console.error("Failed to get NFTs", error);
       }
     };
