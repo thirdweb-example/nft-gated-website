@@ -2,20 +2,20 @@
 
 This project demonstrates how you can restrict content on your website to only those users who own an NFT from your collection.
 
-We use an [NFT Drop](https://portal.thirdweb.com/pre-built-contracts/nft-drop) contract to enable users to claim one of the NFTs, and show users the restricted content once we detect they have at least one of the NFTs claimed.
+We use an [Edition Drop](https://portal.thirdweb.com/pre-built-contracts/edition-drop) contract to enable users to claim one of the NFTs, and show users the restricted content once we detect they have at least one of the NFTs claimed.
 
 ## Tools:
 
-- [thirdweb React SDK](https://docs.thirdweb.com/react): To access hooks such as [useAddress](https://portal.thirdweb.com/react/react.useaddress) to view the connected wallet address, [useMetamask](https://portal.thirdweb.com/react/react.usemetamask) to connect user's wallets, and [useNFTDrop](https://portal.thirdweb.com/react/react.usenftdrop#usenftdrop-function) to interact with the NFT Drop we deployed via the [dashboard](https://thirdweb.com/dashboard).
-- [thirdweb TypeScript SDK](https://docs.thirdweb.com/typescript): We're using the [ThirdwebProvider](https://docs.thirdweb.com/react) to configure the Network we want our user's to be on, and to check the NFTs that the user owns from our collection using the [getOwned](https://portal.thirdweb.com/pre-built-contracts/nft-drop#nfts-owned-by-a-specific-wallet) function.
+- [thirdweb React SDK](https://docs.thirdweb.com/react): To access hooks such as [useAddress](https://portal.thirdweb.com/react/react.useaddress) to view the connected wallet address, [useMetamask](https://portal.thirdweb.com/react/react.usemetamask) to connect user's wallets, and [useEdition](https://portal.thirdweb.com/react/react.useeditiondrop) to interact with the Edition Drop we deployed via the [dashboard](https://thirdweb.com/dashboard).
+- [thirdweb TypeScript SDK](https://docs.thirdweb.com/typescript): We're using the [ThirdwebProvider](https://docs.thirdweb.com/react) to configure the Network we want our user's to be on, and to check the NFTs that the user owns from our collection using the [getOwned](https://portal.thirdweb.com/pre-built-contracts/edition-drop#nfts-owned-by-a-specific-wallet) function.
 
 ## Using This Repo
 
-- Create an NFT Drop contract via the thirdweb dashboard on the Polygon Mumbai (MATIC) test network. You can use our [NFT Drop documentation](https://portal.thirdweb.com/pre-built-contracts/nft-drop#create-an-nft-drop-contract) to help guide you through this.
+- Create an Edition Drop contract via the thirdweb dashboard on the Polygon Mumbai (MATIC) test network.
 
 - Clone this repository.
 
-- Replace the address in `useNFTDrop` with your NFT Drop contract address from the dashboard.
+- Replace the address in `useEditionDrop` with your Edition Drop contract address from the dashboard.
 
 ```bash
 npm install
@@ -68,7 +68,7 @@ If the `address` is undefined, we show the user a welcome page, and ask them to 
 We use the Typescript SDK to check the user's NFTs using the [getOwned](https://portal.thirdweb.com/pre-built-contracts/nft-drop#nfts-owned-by-a-specific-wallet) function.
 
 ```tsx
-const nfts = await nftDrop.getOwned(address);
+const nfts = await editionDrop.getOwned(address);
 ```
 
 If the user has at least one NFT, we show the user the restricted content!
@@ -80,7 +80,7 @@ When the user doesn't have an NFT from our collection in their connected wallet,
 We use the [claim](https://portal.thirdweb.com/pre-built-contracts/nft-drop#minting--claiming-nfts) function to mint a new NFT for the user.
 
 ```tsx
-await nftDrop.claim(1); // 1 is the quantity of NFTs to mint
+await editionDrop.claim(0, 1); // 0 is the tokenId, 1 is the quantity of NFTs to mint
 ```
 
 ## Join our Discord!
