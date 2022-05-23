@@ -38,7 +38,7 @@ export default function App() {
 
     const checkBalance = async () => {
       try {
-        const nfts = await editionDrop.getOwned(address);
+        const nfts = await editionDrop?.getOwned(address);
         setHasClaimedNFT(nfts?.length > 0);
         setChecking(false);
         setIsClaiming(false);
