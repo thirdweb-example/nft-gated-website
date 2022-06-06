@@ -23,7 +23,7 @@ npx create-tw-app --example nft-gated-website
 
 # Guide
 
-## Setting Up Magic Link WalletConnector
+## Setting Up the ThirdwebProvider
 
 Inside [index.js](./src/index.js), we are wrapping our application with the [ThirdwebProvider](https://docs.thirdweb.com/react) component, which allows us to configure the **Network** we want our user's to be on, which we have set to `ChainId.Mumbai` in this demo.
 
