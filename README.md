@@ -13,25 +13,13 @@ We use an [Edition Drop](https://portal.thirdweb.com/pre-built-contracts/edition
 
 - Create an Edition Drop contract via the thirdweb dashboard on the Polygon Mumbai (MATIC) test network.
 
-- Clone this repository.
+- Clone this repository by running:
+
+```bash
+npx create-tw-app --example nft-gated-website
+```
 
 - Replace the address in `useEditionDrop` with your Edition Drop contract address from the dashboard.
-
-```bash
-npm install
-# or
-yarn install
-```
-
-- Run the development server:
-
-```bash
-npm run start
-# or
-yarn start
-```
-
-- Visit http://localhost:3000/ to view the demo.
 
 # Guide
 
