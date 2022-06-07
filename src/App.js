@@ -5,9 +5,10 @@ import {
   ChainId,
   useNetwork,
   useEditionDrop,
+  useNFTBalance,
 } from "@thirdweb-dev/react";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./styles.css";
 
 // truncates the address so it displays in a nice format
@@ -26,36 +27,10 @@ export default function App() {
   const editionDrop = useEditionDrop(
     "0x1fCbA150F05Bbe1C9D21d3ab08E35D682a4c41bF"
   );
-  const [checking, setChecking] = useState(true);
-  const [hasClaimedNFT, setHasClaimedNFT] = useState(false);
+
   const [isClaiming, setIsClaiming] = useState(false);
 
-  useEffect(() => {
-    // If they don't have an connected wallet, return
-    if (!address) {
-      return;
-    }
-
-    const checkBalance = async () => {
-      try {
-        const nfts = await editionDrop?.getOwned(address);
-        setHasClaimedNFT(nfts?.length > 0);
-        setChecking(false);
-        setIsClaiming(false);
-      } catch (error) {
-        setHasClaimedNFT(false);
-        setChecking(false);
-        console.error("Failed to get NFTs", error);
-      }
-    };
-    checkBalance();
-  }, [
-    address,
-    connectWithMetamask,
-    networkMismatched,
-    editionDrop,
-    switchNetwork,
-  ]);
+  const { data: balance, isLoading } = useNFTBalance(editionDrop, address, "0");
 
   const mintNft = async () => {
     try {
@@ -73,9 +48,7 @@ export default function App() {
 
       setIsClaiming(true);
       await editionDrop.claim(0, 1);
-      setHasClaimedNFT(true);
     } catch (error) {
-      setHasClaimedNFT(false);
       console.error("Failed to mint NFT", error);
     } finally {
       setIsClaiming(false);
@@ -94,7 +67,7 @@ export default function App() {
     );
   }
 
-  if (checking) {
+  if (isLoading) {
     return (
       <div className="container">
         <h1>Checking your wallet...</h1>
@@ -103,7 +76,7 @@ export default function App() {
   }
 
   // if the user is connected and has an NFT from the drop, display text
-  if (hasClaimedNFT) {
+  if (balance > 0) {
     return (
       <div>
         <h2>Congratulations! You have a Shape Membership Card! 🟦🔺🟣</h2>

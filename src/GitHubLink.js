@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function GitHubLink() {
-  const url = "https://github.com/thirdweb-example/NFT-Gated-Website";
+  const url = "https://github.com/thirdweb-example/nft-Gated-Website";
   return (
     <>
       <div
