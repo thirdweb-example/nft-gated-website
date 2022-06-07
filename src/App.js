@@ -27,9 +27,7 @@ export default function App() {
   const editionDrop = useEditionDrop(
     "0x1fCbA150F05Bbe1C9D21d3ab08E35D682a4c41bF"
   );
-
   const [isClaiming, setIsClaiming] = useState(false);
-
   const { data: balance, isLoading } = useNFTBalance(editionDrop, address, "0");
 
   const mintNft = async () => {
