@@ -6,9 +6,8 @@ import {
   useNetwork,
   useEditionDrop,
   useNFTBalance,
+  useClaimNFT,
 } from "@thirdweb-dev/react";
-
-import { useState } from "react";
 import "./styles.css";
 
 // truncates the address so it displays in a nice format
@@ -21,36 +20,33 @@ export default function App() {
   const address = useAddress();
   const connectWithMetamask = useMetamask();
   const networkMismatched = useNetworkMismatch();
+  const claimNFT = useClaimNFT();
   const [, switchNetwork] = useNetwork(); // Switch network
 
   // Replace this address with your NFT Drop address!
   const editionDrop = useEditionDrop(
     "0x1fCbA150F05Bbe1C9D21d3ab08E35D682a4c41bF"
   );
-  const [isClaiming, setIsClaiming] = useState(false);
   const { data: balance, isLoading } = useNFTBalance(editionDrop, address, "0");
 
-  const mintNft = async () => {
-    try {
-      // If they don't have an connected wallet, ask them to connect!
-      if (!address) {
-        connectWithMetamask();
-        return;
-      }
-
-      // Ensure they're on the right network (mumbai)
-      if (networkMismatched) {
-        switchNetwork(ChainId.Mumbai);
-        return;
-      }
-
-      setIsClaiming(true);
-      await editionDrop.claim(0, 1);
-    } catch (error) {
-      console.error("Failed to mint NFT", error);
-    } finally {
-      setIsClaiming(false);
+  const mintNft = () => {
+    // Ensure they're on the right network (mumbai)
+    if (networkMismatched) {
+      switchNetwork(ChainId.Mumbai);
+      return;
     }
+
+    claimNFT.mutate(
+      { to: address, quantity: 1 },
+      {
+        onSuccess: () => {
+          console.log("Successfully minted!");
+        },
+        onError: (err) => {
+          console.error("Failed to mint NFT", err);
+        },
+      },
+    );
   };
 
   //if there isn't a wallet connected, display our connect MetaMask button
@@ -89,8 +85,8 @@ export default function App() {
         There are no Shape Membership Card NFTs held by:{" "}
         <span className="value">{truncateAddress(address)}</span>
       </p>
-      <button className="btn" disabled={isClaiming} onClick={mintNft}>
-        {isClaiming ? "Claiming..." : "Mint NFT"}
+      <button className="btn" disabled={claimNFT.isLoading} onClick={mintNft}>
+        {claimNFT.isLoading ? "Minting..." : "Mint NFT"}
       </button>
     </div>
   );
