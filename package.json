@@ -39,6 +39,7 @@
     ]
   },
   "devDependencies": {
-    "assert": "^2.0.0"
+    "assert": "^2.0.0",
+    "stream": "^0.0.2"
   }
 }
