@@ -1,0 +1,168 @@
+.footerContainer {
+  height: 85px;
+  width: 100vw;
+  background-color: #262936;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: 5%;
+}
+
+.right {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  margin-right: 5%;
+  gap: 30px;
+}
+
+.secondaryButton {
+  cursor: pointer;
+  text-align: center;
+  padding: 5px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.mainButton {
+  cursor: pointer;
+  display: inline-flex;
+  appearance: none;
+  align-items: center;
+  -webkit-box-align: center;
+  justify-content: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  line-height: 1.2;
+  font-weight: 600;
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform;
+  transition-duration: 200ms;
+  height: 3rem;
+  min-width: 3rem;
+  font-size: 1rem;
+  background: #e5e5ea;
+  background-image: linear-gradient(to right, #cc25b3 0%, #418dff 101.52%);
+  color: #fff;
+  width: 180px;
+  text-align: center;
+  border-radius: 9999px;
+}
+
+.mainButton:hover {
+  opacity: 0.8;
+}
+
+/* If mobile, stack right column */
+@media screen and (max-width: 700px) {
+  .footerContainer {
+    height: 96px;
+  }
+
+  .right {
+    flex-direction: column;
+    gap: 10px;
+    margin-right: 10%;
+  }
+
+  /* Hide second and third children */
+  .right > *:nth-child(2) {
+    display: none;
+  }
+
+  .right > *:nth-child(3) {
+    display: none;
+  }
+}
+
+.noUnderline {
+  text-decoration: none;
+}
+
+.overlayBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+}
+
+.overlayGuide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  max-width: 90%;
+  background-color: #262936;
+  border-radius: 12px;
+  padding: 20px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 1px 1px 3px 1px rgb(20 0 50 / 19%),
+    0 0 15px 0 rgb(238 50 255 / 57%), 0 5px 53px 0 rgb(75 29 255 / 73%);
+}
+
+.overlayLogo {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.closeGuide {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+.guideHeader {
+  margin-top: 64px;
+  margin-bottom: 0px;
+}
+
+.noGutter {
+  margin-bottom: 0px;
+}
+
+.resourcesList {
+  text-align: start;
+}
+
+.blue {
+  color: #3e76d5;
+}
+
+.joinDiscordLink {
+  color: #9f2c9d;
+  text-decoration: none;
+}

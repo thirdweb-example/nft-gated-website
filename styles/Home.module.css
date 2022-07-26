@@ -1,0 +1,110 @@
+.container {
+  margin-top: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  padding: 0 24px;
+}
+
+.h1 {
+  margin-bottom: 0px;
+}
+
+.explain {
+  font-size: 1.125rem;
+}
+
+.purple {
+  color: #9f2c9d;
+}
+
+.divider {
+  width: 50%;
+  border-color: grey;
+  opacity: 0.25;
+}
+
+.smallDivider {
+  width: 25%;
+  border-color: grey;
+  margin-top: 64px;
+  opacity: 0.25;
+}
+
+.mainButton {
+  cursor: pointer;
+  display: inline-flex;
+  appearance: none;
+  align-items: center;
+  -webkit-box-align: center;
+  justify-content: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  line-height: 1.2;
+  font-weight: 600;
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform;
+  transition-duration: 200ms;
+  height: 3rem;
+  min-width: 3rem;
+  font-size: 1rem;
+  background: #e5e5ea;
+  background-image: linear-gradient(to left, #cc25b3 0%, #418dff 101.52%);
+  color: #fff;
+  width: 180px;
+  text-align: center;
+  border-radius: 9999px;
+  border-style: none;
+}
+
+.mainButton:hover {
+  opacity: 0.8;
+}
+
+.secondaryButton {
+  cursor: pointer;
+  text-align: center;
+  padding: 5px;
+  color: #fff;
+  font-weight: 600;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.contractBoxGrid {
+  width: 1200px;
+  max-width: 95vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1%;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+/* Between 700px and 900px */
+@media screen and (min-width: 700px) and (max-width: 900px) {
+  .contractBoxGrid {
+    gap: 2%;
+  }
+
+  .contractBox {
+    width: 48%;
+  }
+}
+
+@media screen and (max-width: 699px) {
+  .contractBoxGrid {
+    gap: 2%;
+  }
+
+  .contractBox {
+    width: 98%;
+  }
+}
