@@ -1,4 +1,16 @@
-## Getting Started
+# NFT Gated Website
+
+This project demonstrates how you can restrict content on your website to only those users who own an NFT from your collection.
+
+We use an [Edition Drop](https://portal.thirdweb.com/pre-built-contracts/edition-drop) contract to enable users to claim one of the NFTs, and serve users
+the restricted content if they have at least one of the NFTs claimed.
+
+## Tools:
+
+- [React SDK](https://docs.thirdweb.com/react): To access the connected wallet, switch the user's network, and claim an NFT from our Edition Drop collection.
+- [Auth](https://portal.thirdweb.com/building-web3-apps/authenticating-users): To ask users to sign a message and verify they own the wallet they claim to be, while on the server-side
+
+## Using This Template
 
 Create a project using this example:
 
@@ -6,10 +18,13 @@ Create a project using this example:
 npx thirdweb create --authentication-restricted-content
 ```
 
+- Create an [Edition Drop](https://thirdweb.com/contracts/new/pre-built/drop/edition-drop) contract using the dashboard.
+- Replace instances of our contract address (`0x1fCbA150F05Bbe1C9D21d3ab08E35D682a4c41bF`) with the address of the contract you created in [index.js](/pages/index.js) and [the API route](/pages/api/get-restricted-content.js).
+
 ## How It Works
 
 This template uses our [authentication SDK](https://portal.thirdweb.com/building-web3-apps/authenticating-users) to serve restricted content
-to users who have permission on the server side.
+to users who own at least one NFT from the collection.
 
 ### Sign In
 
@@ -22,7 +37,7 @@ const loginPayload = await sdk.auth.login(domain);
 
 ### Request Restricted Content
 
-This payload is sent along with a request for restricted data on the server side.
+This payload is sent in the `body` of a `fetch` request for restricted data on our API route on the server-side.
 
 ```jsx
 // Make api request to server and send the login payload in the body
@@ -49,7 +64,7 @@ const domain = "thirdweb.com";
 const verified = sdk.auth.verify(domain, loginPayload);
 ```
 
-This gives us a way to verify the connected wallet on the server-side.
+This gives us a way to verify the connected wallet on the server-side!
 
 ### Why Is This Important?
 

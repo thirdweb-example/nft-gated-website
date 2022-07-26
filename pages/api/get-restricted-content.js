@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   // Now check if the user meets the criteria to see this content
   // (e.g. they own an NFT from the collection)
   const editionDrop = sdk.getEditionDrop(
-    "0x1fCbA150F05Bbe1C9D21d3ab08E35D682a4c41bF"
+    "0x1fCbA150F05Bbe1C9D21d3ab08E35D682a4c41bF" // replace this with your contract address
   );
 
   // Get addresses' balance of token ID 0
