@@ -31,6 +31,8 @@ to users who own at least one NFT from the collection.
 When the user clicks the `Request Access` button, they are prompted to sign a message on the client-side, which uses the SDK to generate a login payload.
 
 ```jsx
+// Add the domain of the application users will login to, this will be used throughout the login process
+const domain = "thirdweb.com";
 // Generate a signed login payload for the connected wallet to authenticate with
 const loginPayload = await sdk.auth.login(domain);
 ```
@@ -64,7 +66,24 @@ const domain = "thirdweb.com";
 const verified = sdk.auth.verify(domain, loginPayload);
 ```
 
-This gives us a way to verify the connected wallet on the server-side!
+And then check if that wallet has at least one NFT from our collection:
+
+```jsx
+// Get addresses' balance of token ID 0
+const balance = await editionDrop.balanceOf(loginPayload.payload.address, 0);
+
+if (balance > 0) {
+  // If the user is verified and has an NFT, return the content
+  res.status(200).json({
+    message: "This is the restricted content",
+  });
+} else {
+  // If the user is verified but doesn't have an NFT, return a message
+  res.status(200).json({
+    message: "You don't have an NFT",
+  });
+}
+```
 
 ### Why Is This Important?
 
