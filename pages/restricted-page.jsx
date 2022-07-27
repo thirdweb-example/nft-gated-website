@@ -32,9 +32,9 @@ export default function RestrictedPage({ canSeeContent, content }) {
 
 // This gets called on every request
 export async function getServerSideProps(context) {
-  const parsedCookies = cookie.parse(context.req.headers.cookie);
+  const parsedCookies = cookie?.parse(context?.req?.headers?.cookie || "");
 
-  const authToken = parsedCookies["access_token"];
+  const authToken = parsedCookies?.["access_token"];
 
   if (!authToken) {
     return {
