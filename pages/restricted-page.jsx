@@ -3,12 +3,29 @@ import * as cookie from "cookie";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import styles from "../styles/Home.module.css";
 
-export default function RestrictedPage({ canSeeContent }) {
+// Here, canSeeContent will be true or false. It will be true if:
+// - the user has authenticated with their wallet (signed the login message)
+// - the user owns an NFT from our collection.
+// Content will be undefined unless the "canSeeContent" is true.
+export default function RestrictedPage({ canSeeContent, content }) {
   return (
     <div className={styles.container}>
       {/* Top Section */}
       <h1 className={styles.h1}>Restricted Content Page!</h1>
-      <p className={styles.explain}>{canSeeContent.toString()}</p>
+
+      {canSeeContent ? (
+        <>
+          <p className={styles.explain}>
+            Thanks for being a member of our community! Here is your content:
+          </p>
+          <p>{content}</p>
+        </>
+      ) : (
+        <p>
+          You can't view this content because you don't own an NFT from our
+          collection.
+        </p>
+      )}
     </div>
   );
 }
@@ -18,6 +35,15 @@ export async function getServerSideProps(context) {
   const parsedCookies = cookie.parse(context.req.headers.cookie);
 
   const authToken = parsedCookies["access_token"];
+
+  if (!authToken) {
+    return {
+      props: {
+        canSeeContent: false,
+      },
+    };
+  }
+
   console.log(authToken);
 
   // Validate the authentication token
@@ -44,9 +70,16 @@ export async function getServerSideProps(context) {
   // If the balance is greater than 0, then the user can see the content
   const canSeeContent = balance > 0;
 
+  let content;
+  if (canSeeContent) {
+    // Here is where you would make a request to load some content, such as from a database.
+    content = "Here is some restricted content since you own an NFT!";
+  }
+
   return {
     props: {
       canSeeContent,
+      content,
     },
   };
 }

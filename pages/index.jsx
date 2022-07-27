@@ -1,41 +1,15 @@
-import {
-  useAddress,
-  useMetamask,
-  useSDK,
-  useEditionDrop,
-  useClaimNFT,
-  useNetwork,
-  useNetworkMismatch,
-  useOwnedNFTs,
-} from "@thirdweb-dev/react";
+import { useAddress, useMetamask, useSDK } from "@thirdweb-dev/react";
+import { useRouter } from "next/router";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
+  const router = useRouter();
   // Wallet & Network Information
   const address = useAddress();
   const connectWithMetamask = useMetamask();
 
-  // Hooks to ensure user is on the right network
-  const [, switchNetwork] = useNetwork();
-  const networkMismatch = useNetworkMismatch();
-
   // Get an instance of our SDK to access sdk.auth
   const sdk = useSDK();
-
-  // For user to claim an NFT to then view the restricted content
-  const editionDropContract = useEditionDrop(
-    "0x1fCbA150F05Bbe1C9D21d3ab08E35D682a4c41bF" // replace this with your contract address
-  );
-
-  // Hook to claim NFTs from the NFT drop (to allow users to claim and *then* view the restricted content)
-  const { mutate: claimNft, isLoading: isClaiming } =
-    useClaimNFT(editionDropContract);
-
-  // Load NFTs owned by the connected wallet
-  const { data: ownedNfts, isLoading: loadingOwned } = useOwnedNFTs(
-    editionDropContract,
-    address
-  );
 
   // Function to make a request to our /api/get-restricted-content route to check if we own an NFT.
   async function signIn() {
@@ -54,7 +28,7 @@ export default function Home() {
       body: JSON.stringify({ payload }),
     });
 
-    console.log(response);
+    router.push("/restricted-page");
   }
 
   return (
