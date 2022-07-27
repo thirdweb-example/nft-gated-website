@@ -46,11 +46,15 @@ export async function getServerSideProps(context) {
 
   console.log(authToken);
 
+  const PRIVATE_KEY = process.env.ADMIN_PRIVATE_KEY;
+  if (!PRIVATE_KEY) {
+    throw new Error(
+      "You need to add an ADMIN_PRIVATE_KEY environment variable."
+    );
+  }
+
   // Validate the authentication token
-  const sdk = ThirdwebSDK.fromPrivateKey(
-    process.env.ADMIN_PRIVATE_KEY,
-    "mumbai"
-  );
+  const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY, "mumbai");
 
   // Authenticate token with the SDK
   const domain = "thirdweb.com";
