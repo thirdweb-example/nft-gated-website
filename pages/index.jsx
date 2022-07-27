@@ -28,7 +28,13 @@ export default function Home() {
       body: JSON.stringify({ payload }),
     });
 
-    router.push("/restricted-page");
+    if (response.ok) {
+      router.push("/restricted-page");
+    } else {
+      const data = await response.json();
+      console.log(data);
+      alert(data.error);
+    }
   }
 
   return (
