@@ -116,7 +116,7 @@ export default function Home() {
             style={{ width: "fit-content", paddingRight: 16, paddingLeft: 16 }}
             onClick={() => (address ? signIn() : connectWithMetamask())}
           >
-            {address ? "Sign In With Ethereum" : "Connect Wallet"}
+            {address ? "Log In With Wallet" : "Connect Wallet"}
           </button>
         </>
       )}
