@@ -6,7 +6,6 @@ import {
   useClaimNFT,
   useNetwork,
   useNetworkMismatch,
-  ChainId,
   useOwnedNFTs,
 } from "@thirdweb-dev/react";
 import styles from "../styles/Home.module.css";
@@ -39,30 +38,23 @@ export default function Home() {
   );
 
   // Function to make a request to our /api/get-restricted-content route to check if we own an NFT.
-  async function requestAuthenticatedContent() {
+  async function signIn() {
     // Add the domain of the application users will login to, this will be used throughout the login process
     const domain = "thirdweb.com";
 
     // Generate a signed login payload for the connected wallet to authenticate with
-    const loginPayload = await sdk.auth.login(domain);
+    const payload = await sdk.auth.login(domain);
 
     // Make api request to server
-    const response = await fetch(`/api/get-restricted-content`, {
+    const response = await fetch("/api/login", {
       method: "POST",
-      body: JSON.stringify({
-        loginPayload,
-      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ payload }),
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data);
-      alert(`Here's your content: ${data.message}`);
-    } else {
-      alert(
-        "Unauthorized! You don't own an NFT, so you can't view the content, sorry!"
-      );
-    }
+    console.log(response);
   }
 
   return (
@@ -85,59 +77,14 @@ export default function Home() {
         !
       </p>
 
-      <hr className={styles.divider} />
-
-      <div className={styles.contractBoxGrid}></div>
-
       {address ? (
-        <>
-          <p>To access the restricted content, you must own an NFT!</p>
-
-          <p>
-            This wallet owns <b>{ownedNfts?.length || "Loading..."}</b> NFTs in
-            the collection.
-          </p>
-
-          <button
-            className={styles.secondaryButton}
-            onClick={() => {
-              if (networkMismatch) {
-                switchNetwork(ChainId.Mumbai);
-                return;
-              }
-              claimNft({
-                quantity: 1,
-                tokenId: 0,
-                to: address,
-              });
-            }}
-          >
-            {!isClaiming ? " Claim An NFT" : "Claiming..."}
-          </button>
-
-          <hr className={styles.smallDivider} />
-
-          <p style={{ marginTop: 32 }}>
-            Because you{" "}
-            {loadingOwned ? "Loading..." : ownedNfts?.length > 0 ? "" : "don't"}{" "}
-            own one, the API request for restricted access to the content should{" "}
-            <b>
-              {loadingOwned
-                ? "Loading..."
-                : ownedNfts?.length > 0
-                ? "Succeed"
-                : "Fail"}
-            </b>
-            !
-          </p>
-
-          <button
-            className={styles.mainButton}
-            onClick={() => requestAuthenticatedContent()}
-          >
-            Request Content
-          </button>
-        </>
+        <button
+          className={styles.mainButton}
+          style={{ width: "fit-content", paddingRight: 16, paddingLeft: 16 }}
+          onClick={signIn}
+        >
+          Sign In With Ethereum
+        </button>
       ) : (
         <button onClick={connectWithMetamask} className={styles.mainButton}>
           Connect Wallet
