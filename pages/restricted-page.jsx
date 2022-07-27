@@ -22,7 +22,7 @@ export default function RestrictedPage({ canSeeContent, content }) {
         </>
       ) : (
         <p>
-          You can't view this content because you don't own an NFT from our
+          You cannot view this content because you do not own an NFT from our
           collection.
         </p>
       )}
