@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <ThirdwebProvider desiredChainId={activeChainId}>
       <Head>
-        <title>thirdweb Contract Example Hub</title>
+        <title>thirdweb NFT Gated Website</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta
           name="description"
