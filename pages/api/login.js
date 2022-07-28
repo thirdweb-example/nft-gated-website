@@ -1,10 +1,11 @@
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { serialize } from "cookie";
+import checkBalance from "../../util/checkBalance";
 
 const login = async (req, res) => {
-  if (req.method !== "POST") {
+  if (req.method !== "GET") {
     return res.status(400).json({
-      error: "Invalid method. Only POST supported.",
+      error: "Invalid method. Only GET supported.",
     });
   }
 
@@ -22,7 +23,9 @@ const login = async (req, res) => {
   );
 
   // Get signed login payload from the frontend
-  const payload = req.body.payload;
+  const payload = JSON.parse(req.query.payload);
+
+  console.log(payload);
   if (!payload) {
     return res.status(400).json({
       error: "Must provide a login payload to generate a token",
@@ -30,7 +33,21 @@ const login = async (req, res) => {
   }
 
   // Generate an access token with the SDK using the signed payload
-  const domain = "thirdweb.com";
+  const domain = "example.org";
+
+  // Verify the token and get the address, so we can check their NFT balance
+  const address = sdk.auth.verify(domain, payload);
+
+  const hasNft = await checkBalance(sdk, address);
+
+  if (!hasNft) {
+    res.status(401).json({
+      error: "You don't own an NFT and cannot access this page.",
+    });
+  }
+
+  // At this point, the user has authenticated and owns at least 1 NFT.
+  // Generate an auth token for them
   const token = await sdk.auth.generateAuthToken(domain, payload);
 
   // Securely set httpOnly cookie on request to prevent XSS on frontend
@@ -45,7 +62,7 @@ const login = async (req, res) => {
     })
   );
 
-  res.status(200).json("Successfully logged in.");
+  res.redirect("/", 302);
 };
 
 export default login;

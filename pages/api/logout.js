@@ -1,9 +1,9 @@
 import { serialize } from "cookie";
 
 const logout = async (req, res) => {
-  if (req.method !== "POST") {
+  if (req.method !== "GET") {
     return res.status(400).json({
-      error: "Invalid method. Only POST supported.",
+      error: "Invalid method. Only GET supported.",
     });
   }
 
@@ -16,7 +16,7 @@ const logout = async (req, res) => {
     })
   );
 
-  res.status(200).json("Successfully logged out.");
+  res.redirect("/login", 302);
 };
 
 export default logout;
