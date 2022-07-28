@@ -3,6 +3,7 @@ import React from "react";
 import * as cookie from "cookie";
 import styles from "../styles/Home.module.css";
 import checkBalance from "../util/checkBalance";
+import { domainName } from "../const/yourDetails";
 
 export default function Home() {
   return (
@@ -24,8 +25,6 @@ export async function getServerSideProps(context) {
   // Check to see if they have an authentication cookie
   const parsedCookies = cookie?.parse(context?.req?.headers?.cookie || "");
   const authToken = parsedCookies?.["access_token"];
-
-  console.log(authToken);
 
   // if there is no auth token, redirect them to the login page
   if (!authToken) {
@@ -49,7 +48,7 @@ export async function getServerSideProps(context) {
   const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY, "mumbai");
 
   // Authenticate token with the SDK
-  const domain = "example.org";
+  const domain = domainName;
   const address = await sdk.auth.authenticate(domain, authToken);
 
   // If the auth token is invalid, redirect them to the login page

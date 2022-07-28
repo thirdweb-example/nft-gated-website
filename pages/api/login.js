@@ -1,5 +1,6 @@
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { serialize } from "cookie";
+import { domainName } from "../../const/yourDetails";
 import checkBalance from "../../util/checkBalance";
 
 const login = async (req, res) => {
@@ -25,7 +26,6 @@ const login = async (req, res) => {
   // Get signed login payload from the frontend
   const payload = JSON.parse(req.query.payload);
 
-  console.log(payload);
   if (!payload) {
     return res.status(400).json({
       error: "Must provide a login payload to generate a token",
@@ -33,10 +33,16 @@ const login = async (req, res) => {
   }
 
   // Generate an access token with the SDK using the signed payload
-  const domain = "example.org";
+  const domain = domainName;
 
   // Verify the token and get the address, so we can check their NFT balance
   const address = sdk.auth.verify(domain, payload);
+
+  if (!address) {
+    return res.status(400).json({
+      error: "Invalid login payload",
+    });
+  }
 
   const hasNft = await checkBalance(sdk, address);
 
