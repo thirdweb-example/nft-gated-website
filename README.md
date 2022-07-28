@@ -20,10 +20,10 @@ npx thirdweb create --nft-gated-website
 
 - Create an [Edition Drop](https://thirdweb.com/contracts/new/pre-built/drop/edition-drop) contract using the dashboard.
 - Update the information in the [yourDetails.js](./const/yourDetails.js) file to use your contract address and auth domain name.
-- Add your wallet's private key as an environment variable in a `.env.local` file called `ADMIN_PRIVATE_KEY`:
+- Add your wallet's private key as an environment variable in a `.env.local` file called `PRIVATE_KEY`:
 
 ```text title=".env.local"
-ADMIN_PRIVATE_KEY=your-wallet-private-key
+PRIVATE_KEY=your-wallet-private-key
 ```
 
 ## How It Works
@@ -78,7 +78,7 @@ If there _is_ an authentication token in this user's cookies, we need to **valid
 
 ```js
 // Instantiate our SDK
-const PRIVATE_KEY = process.env.ADMIN_PRIVATE_KEY;
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY, "mumbai");
 
 // Authenticate token with the SDK

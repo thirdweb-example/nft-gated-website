@@ -37,11 +37,9 @@ export async function getServerSideProps(context) {
   }
 
   // Ensure we are able to generate an auth token using our private key instantiated SDK
-  const PRIVATE_KEY = process.env.ADMIN_PRIVATE_KEY;
+  const PRIVATE_KEY = process.env.PRIVATE_KEY;
   if (!PRIVATE_KEY) {
-    throw new Error(
-      "You need to add an ADMIN_PRIVATE_KEY environment variable."
-    );
+    throw new Error("You need to add an PRIVATE_KEY environment variable.");
   }
 
   // Instantiate our SDK

@@ -10,18 +10,15 @@ const login = async (req, res) => {
     });
   }
 
-  const PRIVATE_KEY = process.env.ADMIN_PRIVATE_KEY;
+  const PRIVATE_KEY = process.env.PRIVATE_KEY;
   if (!PRIVATE_KEY) {
-    console.error("Missing ADMIN_PRIVATE_KEY environment variable");
+    console.error("Missing PRIVATE_KEY environment variable");
     return res.status(500).json({
       error: "Admin private key not set",
     });
   }
 
-  const sdk = ThirdwebSDK.fromPrivateKey(
-    process.env.ADMIN_PRIVATE_KEY,
-    "mumbai"
-  );
+  const sdk = ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, "mumbai");
 
   // Get signed login payload from the frontend
   const payload = JSON.parse(req.query.payload);
