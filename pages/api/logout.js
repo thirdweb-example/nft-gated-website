@@ -16,7 +16,7 @@ const logout = async (req, res) => {
     })
   );
 
-  res.redirect("/login", 302);
+  return res.redirect("/login", 302);
 };
 
 export default logout;
