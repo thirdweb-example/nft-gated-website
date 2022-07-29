@@ -44,7 +44,7 @@ const login = async (req, res) => {
   const hasNft = await checkBalance(sdk, address);
 
   if (!hasNft) {
-    res.status(401).json({
+    return res.status(401).json({
       error: "You don't own an NFT and cannot access this page.",
     });
   }
@@ -65,7 +65,7 @@ const login = async (req, res) => {
     })
   );
 
-  res.redirect("/", 302);
+  return res.redirect("/", 302);
 };
 
 export default login;
