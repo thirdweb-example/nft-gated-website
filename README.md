@@ -23,14 +23,55 @@ npx thirdweb create --nft-gated-website
 - Add your wallet's private key as an environment variable in a `.env.local` file called `PRIVATE_KEY`:
 
 ```text title=".env.local"
-PRIVATE_KEY=your-wallet-private-key
+THIRDWEB_AUTH_PRIVATE_KEY=your-wallet-private-key
 ```
 
 ## How It Works
 
-Using [Auth](https://portal.thirdweb.com/building-web3-apps/authenticating-users), we can verify a user's identity on the server-side, by asking them to sign a message and verify they own the wallet they claim to be, and validating the signature.
+Using [Auth](https://portal.thirdweb.com/auth), we can verify a user's identity on the server-side, by asking them to sign a message and verify they own the wallet they claim to be, and validating the signature.
 
-When we verified the user's identity on the server-side, we check their wallet to see if they have an NFT from our collection. We can then serve different content and restrict what pages they can access based on their balance.
+When we verified the user's identity on the server-side, we check their wallet to see if they have an NFT from our collection. We can then serve different content and restrict what pages they can access based on their NFT balance.
+
+```jsx
+function MyApp({ Component, pageProps }) {
+  return (
+    <ThirdwebProvider
+      desiredChainId={activeChainId}
+      authConfig={{
+        domain: domainName, // This can be any value. e.g. "thirdweb.com"
+        authUrl: "/api/auth",
+        loginRedirect: "/",
+      }}
+    >
+      <Component {...pageProps} />
+    </ThirdwebProvider>
+  );
+}
+
+export default MyApp;
+```
+
+Next, we need to create a configuration file that contains our wallet's private key (used to generate messages for users to sign) and our site's domain name:
+
+This file is called `auth.config.js` and is at the root of the project.
+
+```jsx
+import { ThirdwebAuth } from "@thirdweb-dev/auth/next";
+import { domainName } from "./const/yourDetails";
+
+export const { ThirdwebAuthHandler, getUser } = ThirdwebAuth({
+  privateKey: process.env.THIRDWEB_AUTH_PRIVATE_KEY || "",
+  domain: domainName,
+});
+```
+
+Finally, we have a [catch-all API route](https://nextjs.org/docs/api-routes/dynamic-api-routes#catch-all-api-routes) called `pages/api/auth/[...thirdweb].js`, which exports the `ThirdwebAuthHandler` to manage all of the required auth endpoints like `login` and `logout`.
+
+```jsx
+import { ThirdwebAuthHandler } from "../../../auth.config";
+
+export default ThirdwebAuthHandler();
+```
 
 ## Restricting Access
 
@@ -38,12 +79,20 @@ To begin with, the user will reach the website with no authentication.
 
 When they try to access the restricted page (the `/` route), we use [getServerSideProps](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) to check two things:
 
-1. If the user is currently authenticated (if they have a **valid** `access_token` cookie).
-2. If the user's wallet balance is greater than 0 of the NFTs in our NFT collection.
+1. If the user is currently authenticated (using `getUser`).
+2. If the user's wallet balance is greater than `0` of the NFTs in our NFT collection.
 
 If either of these checks is `false`, we redirect the user to the `/login` page before they are allowed to access the restricted page.
 
 Let's break that down into steps:
+
+### Setting Up the Auth SDK
+
+Inside the [\_app.jsx](./pages/_app.jsx) file, we configure the Auth SDK in the `ThirdwebProvider` component that wraps our application, allowing us to use the hooks of the SDK throughout our application:
+
+```jsx
+
+```
 
 ### Checking For Authentication Token
 
@@ -54,12 +103,9 @@ If this is the first time the user has visited the website, they will not have a
 ```js
 // This gets called on every request
 export async function getServerSideProps(context) {
-  // Check to see if they have an authentication cookie
-  const parsedCookies = cookie?.parse(context?.req?.headers?.cookie || "");
-  const authToken = parsedCookies?.["access_token"];
+  const user = await getUser(context.req);
 
-  // if there is no auth token, redirect them to the login page
-  if (!authToken) {
+  if (!user) {
     return {
       redirect: {
         destination: "/login",
@@ -74,31 +120,7 @@ export async function getServerSideProps(context) {
 
 If the user is not authenticated, then we don't check the user's wallet balance; we just immediately redirect them to the `/login` page.
 
-If there _is_ an authentication token in this user's cookies, we need to **validate** that token is legitimate:
-
-```js
-// Instantiate our SDK
-const PRIVATE_KEY = process.env.PRIVATE_KEY;
-const sdk = ThirdwebSDK.fromPrivateKey(PRIVATE_KEY, "mumbai");
-
-// Authenticate token with the SDK
-const domain = domainName;
-const address = await sdk.auth.authenticate(domain, authToken);
-```
-
-Once again, if the token is not valid, then we redirect the user to the `/login` page.
-
-```js
-// If the auth token is invalid, redirect them to the login page
-if (!address) {
-  return {
-    redirect: {
-      destination: "/login",
-      permanent: false,
-    },
-  };
-}
-```
+If there _is_ a detected user from `getUser`, we can then check their balance.
 
 ### Checking Wallet Balance
 
@@ -114,6 +136,7 @@ export default async function checkBalance(sdk, address) {
     contractAddress // replace this with your contract address
   );
 
+  // Here, "0" is checking the balance of token ID 0.
   const balance = await editionDrop.balanceOf(address, 0);
 
   // gt = greater than
@@ -180,97 +203,41 @@ Once an `address` is detected from the `useAddress` hook, we show them the `Sign
 }
 ```
 
-The `Sign In` button calls the `signIn` function, which:
+The `Sign In` button calls the `login` function that we're importing from the Auth SDK:
 
-1.  Asks the user to sign a message, and creates a **login payload** with that signature.
-2.  Redirects the user to our API route [api/login](./pages/api/login.js), and sends the login payload as a query parameter.
+```jsx
+const login = useLogin();
+```
 
-```js
-// Function to make a request to our /api/get-restricted-content route to check if we own an NFT.
-async function signIn() {
-  // Add the domain of the application users will login to, this will be used throughout the login process
-  const domain = domainName;
-  // Generate a signed login payload for the connected wallet to authenticate with
-  const payload = await sdk.auth.login(domain);
+Inside the [\_app.jsx](./page/_app.jsx) file, we configured the redirect users to the `/` route after they successfully sign in:
 
-  // Make api request to server
-  window.location = `/api/login?payload=${JSON.stringify(payload)}`;
+```jsx
+function MyApp({ Component, pageProps }) {
+  return (
+    <ThirdwebProvider
+      desiredChainId={activeChainId}
+      authConfig={{
+        domain: domainName,
+        authUrl: "/api/auth",
+        loginRedirect: "/", // redirect users to the home page after they successfully sign in
+      }}
+    >
+      <Component {...pageProps} />
+    </ThirdwebProvider>
+  );
 }
+
+export default MyApp;
 ```
 
-### Generating Auth Tokens
-
-On the [api/login](./pages/api/login.js) route, we:
-
-1. Read in the login payload sent as a query parameter.
-
-```js
-// Get signed login payload from the frontend
-const payload = JSON.parse(req.query.payload);
-```
-
-2. Verify the login payload
-
-```js
-// Generate an access token with the SDK using the signed payload
-const domain = domainName;
-// Verify the token and get the address, so we can check their NFT balance
-const address = sdk.auth.verify(domain, payload);
-```
-
-3. If the login payload is valid, check the user's wallet balance.
-
-```js
-const hasNft = await checkBalance(sdk, address);
-```
-
-4. If the user has an NFT, create an authentication token for them.
-
-```js
-// At this point, the user has authenticated and owns at least 1 NFT.
-// Generate an auth token for them
-const token = await sdk.auth.generateAuthToken(domain, payload);
-```
-
-5. Set the authentication token as a cookie
-
-```js
-// Securely set httpOnly cookie on request to prevent XSS on frontend
-// And set path to / to enable access_token usage on all endpoints
-res.setHeader(
-  "Set-Cookie",
-  serialize("access_token", token, {
-    path: "/",
-    httpOnly: true,
-    secure: true,
-    sameSite: "strict",
-  })
-);
-```
-
-6. Redirect the user to the homepage
-
-```js
-res.redirect("/", 302);
-```
-
-If you recall, in the `getServerSideProps` of the home page, we check for this `access_token` cookie. This means if the user refreshes the page while this cookie is still valid, they will be able to view the restricted page _without_ signing in again; assuming they haven't transferred their NFT from this wallet.
+Once the user has authenticated (signed the message), they are redirected to the home page `/`, and the `getServersideProps` logic runs again. Checking to see if they have an NFT balance greater than `0`.
 
 ### Sign Out
 
-Finally, on the home page, we have a `Sign Out` button for the user, which clears their cookie by sending the user to our [/api/logout](./pages/api/logout.js) route, then sending them back to the login page.
+Finally, on the home page, we have a `Sign Out` button for the user, which calls the `logout` function that we imported from the Auth SDK, and sends the user back to the `/login` route.
 
-```js
-// Set the access token to 'none' and expire in 5 seconds
-res.setHeader(
-  "Set-Cookie",
-  serialize("access_token", "none", {
-    path: "/",
-    expires: new Date(Date.now() + 5 * 1000),
-  })
-);
-
-res.redirect("/login", 302);
+```jsx
+const logout = useLogout();
 ```
 
 ## Join our Discord!

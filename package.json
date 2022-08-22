@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@thirdweb-dev/auth": "^0.2.0",
     "@thirdweb-dev/react": "^2",
     "@thirdweb-dev/sdk": "^2",
     "cookie": "^0.5.0",

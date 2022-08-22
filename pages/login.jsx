@@ -1,14 +1,15 @@
 import {
   useAddress,
   useMetamask,
-  useSDK,
   useEditionDrop,
   useClaimNFT,
   useNetwork,
   useNetworkMismatch,
+  useUser,
+  useLogin,
 } from "@thirdweb-dev/react";
+
 import { ChainId } from "@thirdweb-dev/sdk";
-import { domainName } from "../const/yourDetails";
 import styles from "../styles/Home.module.css";
 
 export default function Login() {
@@ -20,9 +21,6 @@ export default function Login() {
   const [, switchNetwork] = useNetwork();
   const networkMismatch = useNetworkMismatch();
 
-  // Get an instance of our SDK to access sdk.auth
-  const sdk = useSDK();
-
   // For user to claim an NFT to then view the restricted content
   const editionDropContract = useEditionDrop(
     "0x1fCbA150F05Bbe1C9D21d3ab08E35D682a4c41bF" // replace this with your contract address
@@ -32,16 +30,9 @@ export default function Login() {
   const { mutate: claimNft, isLoading: isClaiming } =
     useClaimNFT(editionDropContract);
 
-  // Function to make a request to our /api/login route to check if we own an NFT.
-  async function signIn() {
-    // Add the domain of the application users will login to, this will be used throughout the login process
-    const domain = domainName;
-    // Generate a signed login payload for the connected wallet to authenticate with
-    const payload = await sdk.auth.login(domain);
-
-    // Make api request to server with the login payload as a query param
-    window.location = `/api/login?payload=${JSON.stringify(payload)}`;
-  }
+  // Hooks to sign in with ethereum (auth SDK)
+  const login = useLogin(); // Sign in
+  const { user } = useUser(); // Get current user (unused on this page)
 
   return (
     <div className={styles.container}>
@@ -76,7 +67,7 @@ export default function Login() {
           <button
             className={styles.mainButton}
             style={{ width: 256 }}
-            onClick={signIn}
+            onClick={login}
           >
             Sign In
           </button>
