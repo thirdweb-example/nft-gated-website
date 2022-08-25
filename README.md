@@ -15,7 +15,7 @@ the restricted content if they have at least one of the NFTs claimed.
 Create a project using this example:
 
 ```bash
-npx thirdweb create --nft-gated-website
+npx thirdweb create --template nft-gated-website
 ```
 
 - Create an [Edition Drop](https://thirdweb.com/contracts/new/pre-built/drop/edition-drop) contract using the dashboard.
