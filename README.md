@@ -90,10 +90,6 @@ Let's break that down into steps:
 
 Inside the [\_app.jsx](./pages/_app.jsx) file, we configure the Auth SDK in the `ThirdwebProvider` component that wraps our application, allowing us to use the hooks of the SDK throughout our application:
 
-```jsx
-
-```
-
 ### Checking For Authentication Token
 
 First, we check if this user has already been authenticated.
