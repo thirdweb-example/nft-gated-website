@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@thirdweb-dev/auth": "^1",
-    "@thirdweb-dev/react": "^2",
-    "@thirdweb-dev/sdk": "^2",
+    "@thirdweb-dev/react": "^3",
+    "@thirdweb-dev/sdk": "^3",
     "cookie": "^0.5.0",
     "ethers": "^5.6.8",
     "next": "^12.1.6",
