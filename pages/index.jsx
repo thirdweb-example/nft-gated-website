@@ -51,8 +51,8 @@ export async function getServerSideProps(context) {
   const hasNft = await checkBalance(sdk, user.address);
 
   // If they don't have an NFT, redirect them to the login page
-  console.log("User", user.address, "doesn't have an NFT! Redirecting...");
   if (!hasNft) {
+    console.log("User", user.address, "doesn't have an NFT! Redirecting...");
     return {
       redirect: {
         destination: "/login",
