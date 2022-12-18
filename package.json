@@ -14,12 +14,12 @@
     "@thirdweb-dev/sdk": "^3",
     "cookie": "^0.5.0",
     "ethers": "^5.6.8",
-    "next": "^12.1.6",
+    "next": "^12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "eslint": "8.11.0",
-    "eslint-config-next": "12.1.0"
+    "eslint-config-next": "^12"
   }
 }

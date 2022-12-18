@@ -183,26 +183,10 @@ const connectWithMetamask = useMetamask();
 <button onClick={() => connectWithMetamask()}>Connect Wallet</button>;
 ```
 
-Once an `address` is detected from the `useAddress` hook, we show them the `Sign In` button:
+We use the `ConnectWallet` component to handle the connection to the user's wallet and signing in.
 
 ```js
-{
-  address ? (
-    <>
-      <button onClick={signIn}>Sign In</button>
-    </>
-  ) : (
-    <>
-      <button onClick={() => connectWithMetamask()}>Connect Wallet</button>
-    </>
-  );
-}
-```
-
-The `Sign In` button calls the `login` function that we're importing from the Auth SDK:
-
-```jsx
-const login = useLogin();
+<ConnectWallet />
 ```
 
 Inside the [\_app.jsx](./page/_app.jsx) file, we configured the redirect users to the `/` route after they successfully sign in:
