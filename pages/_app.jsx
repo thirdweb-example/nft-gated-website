@@ -14,7 +14,6 @@ function MyApp({ Component, pageProps }) {
       authConfig={{
         domain: domainName,
         authUrl: "/api/auth",
-        loginRedirect: "/",
       }}
     >
       <Head>
