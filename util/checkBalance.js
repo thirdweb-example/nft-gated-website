@@ -1,8 +1,9 @@
 import { contractAddress } from "../const/yourDetails";
 
 export default async function checkBalance(sdk, address) {
-  const editionDrop = await sdk.getEditionDrop(
-    contractAddress // replace this with your contract address
+  const editionDrop = await sdk.getContract(
+    contractAddress, // replace this with your contract address
+    "edition-drop"
   );
 
   const balance = await editionDrop.balanceOf(address, 0);
