@@ -2,13 +2,12 @@
 
 This project demonstrates how you can restrict content on your website to only those users who own an NFT from your collection.
 
-We use an [Edition Drop](https://portal.thirdweb.com/pre-built-contracts/edition-drop) contract to enable users to claim one of the NFTs, and serve users
-the restricted content if they have at least one of the NFTs claimed.
+We use an [Edition Drop](https://portal.thirdweb.com/pre-built-contracts/edition-drop) contract to enable users to claim one of the NFTs, and serve users the restricted content if they have at least one of the NFTs claimed.
 
 ## Tools:
 
 - [React SDK](https://docs.thirdweb.com/react): To access the connected wallet, switch the user's network, and claim an NFT from our Edition Drop collection.
-- [Auth](https://portal.thirdweb.com/building-web3-apps/authenticating-users): To ask users to sign a message and verify they own the wallet they claim to be, while on the server-side.
+- [Auth](https://portal.thirdweb.com/auth): To ask users to sign a message and verify they own the wallet they claim to be, while on the server-side.
 
 ## Using This Template
 
@@ -38,9 +37,8 @@ function MyApp({ Component, pageProps }) {
     <ThirdwebProvider
       desiredChainId={activeChainId}
       authConfig={{
-        domain: domainName, // This can be any value. e.g. "thirdweb.com"
+        domain: domainName, // This can be any value. e.g. "example.org"
         authUrl: "/api/auth",
-        loginRedirect: "/",
       }}
     >
       <Component {...pageProps} />
@@ -57,11 +55,12 @@ This file is called `auth.config.js` and is at the root of the project.
 
 ```jsx
 import { ThirdwebAuth } from "@thirdweb-dev/auth/next";
+import { PrivateKeyWallet } from "@thirdweb-dev/auth/evm";
 import { domainName } from "./const/yourDetails";
 
 export const { ThirdwebAuthHandler, getUser } = ThirdwebAuth({
-  privateKey: process.env.THIRDWEB_AUTH_PRIVATE_KEY || "",
   domain: domainName,
+  wallet: new PrivateKeyWallet(process.env.THIRDWEB_AUTH_PRIVATE_KEY || ""),
 });
 ```
 
@@ -128,11 +127,11 @@ To do this, we have created a utility function called [checkBalance](./util/chec
 import { contractAddress } from "../const/yourDetails";
 
 export default async function checkBalance(sdk, address) {
-  const editionDrop = await sdk.getEditionDrop(
-    contractAddress // replace this with your contract address
+  const editionDrop = await sdk.getContract(
+    contractAddress, // replace this with your contract address
+    "edition-drop"
   );
 
-  // Here, "0" is checking the balance of token ID 0.
   const balance = await editionDrop.balanceOf(address, 0);
 
   // gt = greater than
@@ -173,51 +172,10 @@ return {
 
 We've now successfully restricted access to our home page, now let's explore the `/login` page.
 
-First, we ask the user to connect their wallet with our `useMetaMask` hook:
-
-```js
-const connectWithMetamask = useMetamask();
-
-// ...
-
-<button onClick={() => connectWithMetamask()}>Connect Wallet</button>;
-```
-
-We use the `ConnectWallet` component to handle the connection to the user's wallet and signing in.
+We use the `ConnectWallet` component to handle the connection to the user's wallet, signing in, and signing out.
 
 ```js
 <ConnectWallet />
-```
-
-Inside the [\_app.jsx](./page/_app.jsx) file, we configured the redirect users to the `/` route after they successfully sign in:
-
-```jsx
-function MyApp({ Component, pageProps }) {
-  return (
-    <ThirdwebProvider
-      desiredChainId={activeChainId}
-      authConfig={{
-        domain: domainName,
-        authUrl: "/api/auth",
-        loginRedirect: "/", // redirect users to the home page after they successfully sign in
-      }}
-    >
-      <Component {...pageProps} />
-    </ThirdwebProvider>
-  );
-}
-
-export default MyApp;
-```
-
-Once the user has authenticated (signed the message), they are redirected to the home page `/`, and the `getServersideProps` logic runs again. Checking to see if they have an NFT balance greater than `0`.
-
-### Sign Out
-
-Finally, on the home page, we have a `Sign Out` button for the user, which calls the `logout` function that we imported from the Auth SDK, and sends the user back to the `/login` route.
-
-```jsx
-const logout = useLogout();
 ```
 
 ## Join our Discord!

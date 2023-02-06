@@ -1,9 +1,4 @@
-import {
-  useAddress,
-  ConnectWallet,
-  Web3Button,
-  useLogin,
-} from "@thirdweb-dev/react";
+import { ConnectWallet, useAddress, Web3Button } from "@thirdweb-dev/react";
 import styles from "../styles/Home.module.css";
 
 // replace this with your contract address
@@ -11,7 +6,6 @@ const contractAddress = "0x1fCbA150F05Bbe1C9D21d3ab08E35D682a4c41bF";
 
 export default function Login() {
   const address = useAddress(); // Get the user's address
-  const { login } = useLogin();
 
   return (
     <div className={styles.container}>
