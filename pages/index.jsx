@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
-import { useLogout } from "@thirdweb-dev/react";
+import { useLogout, useUser } from "@thirdweb-dev/react";
 import { getUser } from "../auth.config";
 import checkBalance from "../util/checkBalance";
 import styles from "../styles/Home.module.css";
+import { useRouter } from "next/router";
 
 export default function Home() {
-  const logout = useLogout();
+  const { logout } = useLogout();
+  const { isLoggedIn, isLoading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && !isLoggedIn) {
+      router.push("/login");
+    }
+  }, [isLoading, isLoggedIn, router]);
 
   return (
     <div className={styles.container}>
