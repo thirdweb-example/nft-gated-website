@@ -1,4 +1,5 @@
 import { ConnectWallet, useAddress, Web3Button } from "@thirdweb-dev/react";
+import Link from "next/link";
 import styles from "../styles/Home.module.css";
 
 // replace this with your contract address
@@ -27,8 +28,11 @@ export default function Login() {
       </p>
 
       <p className={styles.explain}>
-        You cannot access the main page unless you own an NFT from our
-        collection!
+        You cannot access the{" "}
+        <Link className={styles.purple} href="/">
+          main page
+        </Link>{" "}
+        unless you own an NFT from our collection!
       </p>
 
       <hr className={styles.divider} />
