@@ -1,12 +1,12 @@
 # NFT Gated Website
 
-This project demonstrates how you can restrict content on your website to only those users who own an NFT from your collection.
+This project demonstrates how you can restrict content on your website to only those users who own a token of your choice (any ERC-20, ERC-721 or ERC-1155).
 
-We use an [Edition Drop](https://portal.thirdweb.com/pre-built-contracts/edition-drop) contract to enable users to claim one of the NFTs, and serve users the restricted content if they have at least one of the NFTs claimed.
+You can use any token you like, although we will recommend you to use either [Token Drop](https://thirdweb.com/thirdweb.eth/DropERC20), [NFT Drop](https://thirdweb.com/thirdweb.eth/DropERC721) or [Edition Drop](https://thirdweb.com/thirdweb.eth/DropERC1155). That's because we will have a button to claim these test tokens for testing this template. You can also use any other token you like regardless of them being a drop token.
 
 ## Tools:
 
-- [React SDK](https://docs.thirdweb.com/react): To access the connected wallet, switch the user's network, and claim an NFT from our Edition Drop collection.
+- [React SDK](https://portal.thirdweb.com/react): To access the connected wallet, switch the user's network, and claim an NFT from our Edition Drop collection.
 - [Auth](https://portal.thirdweb.com/auth): To ask users to sign a message and verify they own the wallet they claim to be, while on the server-side.
 
 ## Using This Template
@@ -14,12 +14,12 @@ We use an [Edition Drop](https://portal.thirdweb.com/pre-built-contracts/edition
 Create a project using this example:
 
 ```bash
-npx thirdweb create --template nft-gated-website
+npx thirdweb create --template token-gated-website
 ```
 
-- Create an [Edition Drop](https://thirdweb.com/contracts/new/pre-built/drop/edition-drop) contract using the dashboard.
+- Deploy a contract from the links provided above.
 - Update the information in the [yourDetails.js](./const/yourDetails.js) file to use your contract address and auth domain name.
-- Add your wallet's private key as an environment variable in a `.env.local` file called `PRIVATE_KEY`:
+- Add your wallet's private key as an environment variable in a `.env.local` file called `THIRDWEB_AUTH_PRIVATE_KEY`:
 
 ```text title=".env.local"
 THIRDWEB_AUTH_PRIVATE_KEY=your-wallet-private-key
@@ -35,13 +35,22 @@ When we verified the user's identity on the server-side, we check their wallet t
 function MyApp({ Component, pageProps }) {
   return (
     <ThirdwebProvider
-      desiredChainId={activeChainId}
+      activeChain={activeChainId}
       authConfig={{
-        domain: domainName, // This can be any value. e.g. "example.org"
+        domain: domainName,
         authUrl: "/api/auth",
       }}
     >
+      <Head>
+        <title>NFT Gated Website</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="description"
+          content="Learn how to use the thirdweb Auth SDK to create an NFT Gated Website"
+        />
+      </Head>
       <Component {...pageProps} />
+      <ThirdwebGuideFooter />
     </ThirdwebProvider>
   );
 }
@@ -124,22 +133,30 @@ Now we're ready to check the user's wallet balance.
 To do this, we have created a utility function called [checkBalance](./util/checkBalance.js) that we can use to check the user's balance for a given NFT.
 
 ```js
+import { isFeatureEnabled } from "@thirdweb-dev/sdk";
 import { contractAddress } from "../const/yourDetails";
 
 export default async function checkBalance(sdk, address) {
-  const editionDrop = await sdk.getContract(
-    contractAddress, // replace this with your contract address
-    "edition-drop"
+  const contract = await sdk.getContract(
+    contractAddress // replace this with your contract address
   );
 
-  const balance = await editionDrop.balanceOf(address, 0);
+  let balance;
+
+  if (isFeatureEnabled(contract.abi, "ERC1155")) {
+    balance = await contract.erc1155.balanceOf(address, 0);
+  } else if (isFeatureEnabled(contract.abi, "ERC721")) {
+    balance = await contract.erc721.balanceOf(address);
+  } else if (isFeatureEnabled(contract.abi, "ERC20")) {
+    balance = (await contract.erc20.balanceOf(address)).value;
+  }
 
   // gt = greater than
   return balance.gt(0);
 }
 ```
 
-This function returns true or false that we can store in a variable:
+This function will check the type of contract being used, check the balance accordingly and returns true or false that we can store in a variable:
 
 ```js
 const hasNft = await checkBalance(sdk, address);
