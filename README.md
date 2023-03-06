@@ -2,7 +2,9 @@
 
 This project demonstrates how you can restrict content on your website to only those users who own a token of your choice (any ERC-20, ERC-721 or ERC-1155).
 
-You can use any token you like, although we will recommend you to use either [Token Drop](https://thirdweb.com/thirdweb.eth/DropERC20), [NFT Drop](https://thirdweb.com/thirdweb.eth/DropERC721) or [Edition Drop](https://thirdweb.com/thirdweb.eth/DropERC1155). That's because we will have a button to claim these test tokens for testing this template. You can also use any other token you like regardless of them being a drop token.
+You can use any token you like regardless if it's deployed using thirdweb or not. However, if the contract wasn't deployed on thirdweb initially, make sure you import the contract on the thirdweb dashboard.
+
+If you want the token claim functionality, you need to use any of the drop contracts available on our [explore page](https://thirdweb.com/explore).
 
 ## Tools:
 
@@ -17,7 +19,7 @@ Create a project using this example:
 npx thirdweb create --template token-gated-website
 ```
 
-- Deploy a contract from the links provided above.
+- Deploy or import an already deployed token contract on thirdweb dashboard.
 - Update the information in the [yourDetails.js](./const/yourDetails.js) file to use your contract address and auth domain name.
 - Add your wallet's private key as an environment variable in a `.env.local` file called `THIRDWEB_AUTH_PRIVATE_KEY`:
 
