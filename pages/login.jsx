@@ -1,12 +1,26 @@
 import { ConnectWallet, useAddress, Web3Button } from "@thirdweb-dev/react";
+import { isFeatureEnabled } from "@thirdweb-dev/sdk";
 import Link from "next/link";
+import { contractAddress } from "../const/yourDetails";
 import styles from "../styles/Home.module.css";
-
-// replace this with your contract address
-const contractAddress = "0x1fCbA150F05Bbe1C9D21d3ab08E35D682a4c41bF";
 
 export default function Login() {
   const address = useAddress(); // Get the user's address
+
+  const claimToken = async (contract) => {
+    try {
+      if (isFeatureEnabled(contract.abi, "ERC1155")) {
+        await contract.erc1155.claim(0, 1);
+      } else if (isFeatureEnabled(contract.abi, "ERC721")) {
+        await contract.erc721.claim(1);
+      } else if (isFeatureEnabled(contract.abi, "ERC20")) {
+        await contract.erc20.claim(1);
+      }
+    } catch (error) {
+      console.error("Error claiming token", error);
+      alert("There was an error claiming the token. Please try again.");
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -54,10 +68,10 @@ export default function Login() {
 
         <Web3Button
           contractAddress={contractAddress}
-          action={(contract) => contract.erc1155.claim(0, 1)}
+          action={(contract) => claimToken(contract)}
           accentColor="#F213A4"
         >
-          Claim NFT
+          Claim token
         </Web3Button>
       </>
     </div>

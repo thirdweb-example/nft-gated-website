@@ -1,12 +1,20 @@
+import { isFeatureEnabled } from "@thirdweb-dev/sdk";
 import { contractAddress } from "../const/yourDetails";
 
 export default async function checkBalance(sdk, address) {
-  const editionDrop = await sdk.getContract(
-    contractAddress, // replace this with your contract address
-    "edition-drop"
+  const contract = await sdk.getContract(
+    contractAddress // replace this with your contract address
   );
 
-  const balance = await editionDrop.balanceOf(address, 0);
+  let balance;
+
+  if (isFeatureEnabled(contract.abi, "ERC1155")) {
+    balance = await contract.erc1155.balanceOf(address, 0);
+  } else if (isFeatureEnabled(contract.abi, "ERC721")) {
+    balance = await contract.erc721.balanceOf(address);
+  } else if (isFeatureEnabled(contract.abi, "ERC20")) {
+    balance = (await contract.erc20.balanceOf(address)).value;
+  }
 
   // gt = greater than
   return balance.gt(0);
