@@ -1,4 +1,4 @@
-# NFT Gated Website
+# Token Gated Website
 
 This project demonstrates how you can restrict content on your website to only those users who own a token of your choice (any ERC-20, ERC-721 or ERC-1155).
 
