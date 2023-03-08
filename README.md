@@ -4,8 +4,6 @@ This project demonstrates how you can restrict content on your website to only t
 
 You can use any token you like regardless if it's deployed using thirdweb or not. However, if the contract wasn't deployed on thirdweb initially, make sure you import the contract on the thirdweb dashboard.
 
-If you want the token claim functionality, you need to use any of the drop contracts available on our [explore page](https://thirdweb.com/explore).
-
 ## Tools:
 
 - [React SDK](https://portal.thirdweb.com/react): To access the connected wallet, switch the user's network, and claim an NFT from our Edition Drop collection.
@@ -16,7 +14,7 @@ If you want the token claim functionality, you need to use any of the drop contr
 Create a project using this example:
 
 ```bash
-npx thirdweb create --template token-gated-website
+npx thirdweb create --template nft-gated-website
 ```
 
 - Deploy or import an already deployed token contract on thirdweb dashboard.
@@ -90,7 +88,7 @@ To begin with, the user will reach the website with no authentication.
 When they try to access the restricted page (the `/` route), we use [getServerSideProps](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) to check two things:
 
 1. If the user is currently authenticated (using `getUser`).
-2. If the user's wallet balance is greater than `0` of the NFTs in our NFT collection.
+2. If the user's wallet balance is greater than `minTokensRequired` provided in `yourDetails.js` of the NFTs in our NFT collection.
 
 If either of these checks is `false`, we redirect the user to the `/login` page before they are allowed to access the restricted page.
 
@@ -136,7 +134,11 @@ To do this, we have created a utility function called [checkBalance](./util/chec
 
 ```js
 import { isFeatureEnabled } from "@thirdweb-dev/sdk";
-import { contractAddress } from "../const/yourDetails";
+import {
+  contractAddress,
+  erc1155TokenId,
+  minTokensRequired,
+} from "../const/yourDetails";
 
 export default async function checkBalance(sdk, address) {
   const contract = await sdk.getContract(
@@ -146,15 +148,16 @@ export default async function checkBalance(sdk, address) {
   let balance;
 
   if (isFeatureEnabled(contract.abi, "ERC1155")) {
-    balance = await contract.erc1155.balanceOf(address, 0);
+    balance = await contract.erc1155.balanceOf(address, erc1155TokenId);
   } else if (isFeatureEnabled(contract.abi, "ERC721")) {
     balance = await contract.erc721.balanceOf(address);
   } else if (isFeatureEnabled(contract.abi, "ERC20")) {
     balance = (await contract.erc20.balanceOf(address)).value;
+    return balance.gte((minTokensRequired * 1e18).toString());
   }
 
-  // gt = greater than
-  return balance.gt(0);
+  // gte = greater than or equal to
+  return balance.gte(minTokensRequired);
 }
 ```
 
