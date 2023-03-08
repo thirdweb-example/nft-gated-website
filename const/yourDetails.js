@@ -5,7 +5,7 @@ export const contractAddress = "0xB35cE7f1Be137a207e8D959B52767bEabbccE46d";
 export const domainName = "example.com";
 
 // Minimum number of tokens required to access
-export const minTokensRequired = 1;
+export const minimumBalance = 1;
 
 // Token ID for ERC-1155 tokens
 export const erc1155TokenId = 0;

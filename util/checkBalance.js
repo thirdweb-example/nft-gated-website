@@ -2,7 +2,7 @@ import { isFeatureEnabled } from "@thirdweb-dev/sdk";
 import {
   contractAddress,
   erc1155TokenId,
-  minTokensRequired,
+  minimumBalance,
 } from "../const/yourDetails";
 
 export default async function checkBalance(sdk, address) {
@@ -18,9 +18,9 @@ export default async function checkBalance(sdk, address) {
     balance = await contract.erc721.balanceOf(address);
   } else if (isFeatureEnabled(contract.abi, "ERC20")) {
     balance = (await contract.erc20.balanceOf(address)).value;
-    return balance.gte((minTokensRequired * 1e18).toString());
+    return balance.gte((minimumBalance * 1e18).toString());
   }
 
   // gte = greater than or equal to
-  return balance.gte(minTokensRequired);
+  return balance.gte(minimumBalance);
 }
