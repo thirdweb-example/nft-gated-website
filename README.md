@@ -32,6 +32,9 @@ Using [Auth](https://portal.thirdweb.com/auth), we can verify a user's identity 
 When we verified the user's identity on the server-side, we check their wallet to see if they have an NFT from our collection. We can then serve different content and restrict what pages they can access based on their NFT balance.
 
 ```jsx
+// This is the chain your dApp will work on.
+const activeChain = "mumbai";
+
 function MyApp({ Component, pageProps }) {
   return (
     <ThirdwebProvider
