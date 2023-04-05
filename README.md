@@ -38,7 +38,7 @@ const activeChain = "mumbai";
 function MyApp({ Component, pageProps }) {
   return (
     <ThirdwebProvider
-      activeChain={activeChainId}
+      activeChain={activeChain}
       authConfig={{
         domain: domainName,
         authUrl: "/api/auth",
