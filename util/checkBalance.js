@@ -1,4 +1,4 @@
-import { isFeatureEnabled } from "@thirdweb-dev/sdk";
+import { detectFeatures } from "@thirdweb-dev/sdk";
 import {
   contractAddress,
   erc1155TokenId,
@@ -12,11 +12,14 @@ export default async function checkBalance(sdk, address) {
 
   let balance;
 
-  if (isFeatureEnabled(contract.abi, "ERC1155")) {
+  console.log(await detectFeatures(contract.abi));
+  const features = await detectFeatures(contract.abi);
+
+  if (features?.ERC1155?.enabled) {
     balance = await contract.erc1155.balanceOf(address, erc1155TokenId);
-  } else if (isFeatureEnabled(contract.abi, "ERC721")) {
+  } else if (features?.ERC721?.enabled) {
     balance = await contract.erc721.balanceOf(address);
-  } else if (isFeatureEnabled(contract.abi, "ERC20")) {
+  } else if (features?.ERC20?.enabled) {
     balance = (await contract.erc20.balanceOf(address)).value;
     return balance.gte((minimumBalance * 1e18).toString());
   }
