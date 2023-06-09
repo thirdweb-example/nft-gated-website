@@ -1,7 +1,5 @@
 import { ConnectWallet, useAddress, Web3Button } from "@thirdweb-dev/react";
-import { isFeatureEnabled } from "@thirdweb-dev/sdk";
 import Link from "next/link";
-import { contractAddress } from "../const/yourDetails";
 import styles from "../styles/Home.module.css";
 
 export default function Login() {
