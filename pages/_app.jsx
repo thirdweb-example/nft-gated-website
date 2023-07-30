@@ -11,6 +11,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <ThirdwebProvider
       activeChain={activeChain}
+      clientId={process.env.NEXT_PUBLIC_TEMPLATE_CLIENT_ID}
       authConfig={{
         domain: domainName,
         authUrl: "/api/auth",
