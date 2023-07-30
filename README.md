@@ -9,7 +9,7 @@ You can use any token you like regardless if it's deployed using thirdweb or not
 Install via [thirdweb create](https://portal.thirdweb.com/cli/create)
 
 ```bash
-  npx thirdweb create --template marketplace-v3
+  npx thirdweb create --template nft-gated-website
 ```
 
 Edit smart contract details in `const/yourDetails.js`
