@@ -1,10 +1,20 @@
-import React, { useEffect } from "react";
+import {
+  ConnectWallet,
+  MediaRenderer,
+  useContract,
+  useContractMetadata,
+  useLogout,
+  useUser,
+} from "@thirdweb-dev/react";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
-import { useLogout, useUser } from "@thirdweb-dev/react";
-import { getUser } from "../auth.config";
-import checkBalance from "../util/checkBalance";
-import styles from "../styles/Home.module.css";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { getUser } from "../../auth.config";
+import { contractAddress } from "../../const/yourDetails";
+import { Header } from "../components/Header";
+import styles from "../styles/Home.module.css";
+import checkBalance from "../util/checkBalance";
 
 const secretKey = process.env.TW_SECRET_KEY;
 
@@ -17,6 +27,8 @@ export default function Home() {
   const { logout } = useLogout();
   const { isLoggedIn, isLoading } = useUser();
   const router = useRouter();
+  const { contract } = useContract(contractAddress);
+  const { data: contractMetadata } = useContractMetadata(contract);
 
   useEffect(() => {
     if (!isLoading && !isLoggedIn) {
@@ -26,14 +38,38 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.h1}>Restricted Access Page</h1>
+      <Header />
+      <h2 className={styles.heading}>NFT Gated Content </h2>
+      <h1 className={styles.h1}>Auth</h1>
+
       <p className={styles.explain}>
-        Thanks for being a member of our NFT community!
+        Serve exclusive content to users who own an NFT from <br />
+        your collection, using{" "}
+        <Link className={styles.link} href="/">
+          Auth
+        </Link>
+        .{" "}
       </p>
 
-      <button className={styles.mainButton} onClick={logout}>
-        Logout
-      </button>
+      <div className={styles.card}>
+        <h3>Exclusive unlocked</h3>
+        <p>Your NFT unlocked access to this product.</p>
+
+        {contractMetadata && (
+          <div className={styles.nft}>
+            <MediaRenderer
+              src={contractMetadata.image}
+              alt={contractMetadata.name}
+              width="50px"
+              height="50px"
+            />
+            <div className={styles.nftDetails}>
+              <h4>{contractMetadata.name}</h4>
+            </div>
+          </div>
+        )}
+        <ConnectWallet theme="dark" className={styles.connect} />
+      </div>
     </div>
   );
 }

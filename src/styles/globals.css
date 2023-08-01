@@ -5,6 +5,8 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 /* Set core body defaults */
@@ -24,8 +26,8 @@ select {
 }
 
 :root {
-  --background-color: #1c1e21;
-  --white: #ffffff;
+  --background-color: #0e0e10;
+  --white: #ffffff; 
   --tw-color1: #a855f7;
   --tw-color1-hover: #9333ea;
 }
