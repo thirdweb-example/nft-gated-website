@@ -15,7 +15,6 @@ function MyApp({ Component, pageProps }) {
         domain: domainName,
         authUrl: "/api/auth",
       }}
-      clientId={process.env.NEXT_PUBLIC_TEMPLATE_CLIENT_ID}
     >
       <Head>
         <title>NFT Gated Website</title>
