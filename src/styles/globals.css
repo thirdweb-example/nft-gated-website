@@ -14,7 +14,6 @@ body {
   min-height: 100vh;
   text-rendering: optimizeSpeed;
   line-height: 1.5;
-  padding-bottom: 250px;
 }
 
 /* Inherit fonts for inputs and buttons */
@@ -27,7 +26,7 @@ select {
 
 :root {
   --background-color: #0e0e10;
-  --white: #ffffff; 
+  --white: #ffffff;
   --tw-color1: #a855f7;
   --tw-color1-hover: #9333ea;
 }

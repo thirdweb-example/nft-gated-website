@@ -3,7 +3,6 @@ import {
   MediaRenderer,
   useContract,
   useContractMetadata,
-  useLogout,
   useUser,
 } from "@thirdweb-dev/react";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
@@ -24,11 +23,11 @@ if (!secretKey) {
 }
 
 export default function Home() {
-  const { logout } = useLogout();
   const { isLoggedIn, isLoading } = useUser();
   const router = useRouter();
   const { contract } = useContract(contractAddress);
-  const { data: contractMetadata } = useContractMetadata(contract);
+  const { data: contractMetadata, isLoading: contractLoading } =
+    useContractMetadata(contract);
 
   useEffect(() => {
     if (!isLoading && !isLoggedIn) {
@@ -60,14 +59,17 @@ export default function Home() {
             <MediaRenderer
               src={contractMetadata.image}
               alt={contractMetadata.name}
-              width="50px"
-              height="50px"
+              width="70px"
+              height="70px"
             />
             <div className={styles.nftDetails}>
               <h4>{contractMetadata.name}</h4>
+              <p>{contractMetadata.description}</p>
             </div>
           </div>
         )}
+        {contractLoading && <p>Loading...</p>}
+
         <ConnectWallet theme="dark" className={styles.connect} />
       </div>
     </div>
@@ -105,7 +107,6 @@ export async function getServerSideProps(context) {
 
   // If they don't have an NFT, redirect them to the login page
   if (!hasNft) {
-    console.log("User", user.address, "doesn't have an NFT! Redirecting...");
     return {
       redirect: {
         destination: "/login",

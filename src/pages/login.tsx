@@ -11,7 +11,8 @@ import styles from "../styles/Home.module.css";
 
 export default function Login() {
   const { contract } = useContract(contractAddress);
-  const { data: contractMetadata } = useContractMetadata(contract);
+  const { data: contractMetadata, isLoading: contractLoading } =
+    useContractMetadata(contract);
 
   return (
     <div className={styles.container}>
@@ -37,14 +38,17 @@ export default function Login() {
             <MediaRenderer
               src={contractMetadata.image}
               alt={contractMetadata.name}
-              width="50px"
-              height="50px"
+              width="70px"
+              height="70px"
             />
             <div className={styles.nftDetails}>
               <h4>{contractMetadata.name}</h4>
+              <p>{contractMetadata.description.substring(0, 100)}...</p>
             </div>
           </div>
         )}
+        {contractLoading && <p>Loading...</p>}
+
         <ConnectWallet theme="dark" className={styles.connect} />
       </div>
     </div>
