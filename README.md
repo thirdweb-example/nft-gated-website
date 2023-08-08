@@ -22,11 +22,12 @@ npx thirdweb create --template nft-gated-website
 To run this project, you will need to add the following environment variables to your .env file:
 
 ```bash
-THIRDWEB_AUTH_PRIVATE_KEY=paste_your_private_key_here
-THIRDWEB_SECRET_KEY=paste_your_secret_key_here
+THIRDWEB_AUTH_PRIVATE_KEY=
+NEXT_PUBLIC_TEMPLATE_CLIENT_ID=
+TW_SECRET_KEY=
 ```
 
-- Generate your `THIRDWEB_SECRET_KEY` via thirdweb's [dashboard](https://thirdweb.com/create-api-key).
+- Generate your `TW_SECRET_KEY` and `NEXT_PUBLIC_TEMPLATE_CLIENT_ID` via thirdweb's [dashboard](https://thirdweb.com/create-api-key).
 - For `THIRDWEB_AUTH_PRIVATE_KEY` export your wallet private key from your wallet.
 
 ### Run Locally

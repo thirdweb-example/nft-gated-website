@@ -48,9 +48,9 @@
   margin: 0px;
   font-size: 14px;
   opacity: 70%;
+  text-align: start;
 }
 
-.connect,
 .card > button {
   margin-top: 20px !important;
   width: 400px !important;
@@ -77,23 +77,9 @@
   align-items: flex-start;
 }
 
-/* Between 700px and 900px */
-@media screen and (min-width: 700px) and (max-width: 900px) {
-  .contractBoxGrid {
-    gap: 2%;
-  }
-
-  .contractBox {
-    width: 48%;
-  }
-}
-
-@media screen and (max-width: 699px) {
-  .contractBoxGrid {
-    gap: 2%;
-  }
-
-  .contractBox {
-    width: 98%;
+@media screen and (max-width: 700px) {
+  .connect,
+  .card > button {
+    width: 100% !important;
   }
 }
