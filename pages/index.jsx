@@ -6,6 +6,13 @@ import checkBalance from "../util/checkBalance";
 import styles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
 
+const secretKey = process.env.TW_SECRET_KEY;
+
+if (!secretKey) {
+  console.log("Missing env var: TW_SECRET_KEY");
+  throw new Error("Missing env var: TW_SECRET_KEY");
+}
+
 export default function Home() {
   const { logout } = useLogout();
   const { isLoggedIn, isLoading } = useUser();
@@ -54,7 +61,7 @@ export async function getServerSideProps(context) {
   const sdk = ThirdwebSDK.fromPrivateKey(
     process.env.THIRDWEB_AUTH_PRIVATE_KEY,
     "mumbai",
-    { secretKey: process.env.TW_SECRET_KEY }
+    { secretKey }
   );
 
   // Check to see if the user has an NFT
