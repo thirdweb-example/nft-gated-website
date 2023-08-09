@@ -3,7 +3,7 @@ import {
   contractAddress,
   erc1155TokenId,
   minimumBalance,
-} from "../const/yourDetails";
+} from "const/yourDetails";
 
 export default async function checkBalance(sdk, address) {
   const contract = await sdk.getContract(
@@ -12,8 +12,7 @@ export default async function checkBalance(sdk, address) {
 
   let balance;
 
-  console.log(await detectFeatures(contract.abi));
-  const features = await detectFeatures(contract.abi);
+  const features = detectFeatures(contract.abi);
 
   if (features?.ERC1155?.enabled) {
     balance = await contract.erc1155.balanceOf(address, erc1155TokenId);

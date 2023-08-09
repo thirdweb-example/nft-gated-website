@@ -1,0 +1,88 @@
+.container {
+  margin-top: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  padding: 0 24px;
+}
+
+.heading {
+  font-weight: 700;
+  font-size: 1rem;
+  color: transparent;
+  background: linear-gradient(90.35deg, #ba94d8 3.41%, #d62bbf 90.33%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0px;
+}
+
+.h1 {
+  margin: 0px;
+  font-size: 4rem;
+  line-height: 4rem;
+}
+
+.explain {
+  font-size: 1rem;
+  color: #bbbbbc;
+  margin-top: 1rem;
+}
+
+.card {
+  border: 1px #323232 solid;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 5rem;
+}
+
+.card h3 {
+  margin: 0px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.card p {
+  margin: 0px;
+  font-size: 14px;
+  opacity: 70%;
+  text-align: start;
+}
+
+.card > button {
+  margin-top: 20px !important;
+  width: 400px !important;
+  height: 50px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.link {
+  color: #3385ff;
+}
+
+.nft {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.nftDetails {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  align-items: flex-start;
+}
+
+@media screen and (max-width: 700px) {
+  .connect,
+  .card > button {
+    width: 100% !important;
+  }
+}
