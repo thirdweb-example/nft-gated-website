@@ -15,13 +15,6 @@ import { Header } from "../components/Header";
 import styles from "../styles/Home.module.css";
 import checkBalance from "../util/checkBalance";
 
-const secretKey = process.env.TW_SECRET_KEY;
-
-if (!secretKey) {
-  console.log("Missing env var: TW_SECRET_KEY");
-  throw new Error("Missing env var: TW_SECRET_KEY");
-}
-
 export default function Home() {
   const { isLoggedIn, isLoading } = useUser();
   const router = useRouter();
@@ -44,9 +37,14 @@ export default function Home() {
       <p className={styles.explain}>
         Serve exclusive content to users who own an NFT from <br />
         your collection, using{" "}
-        <Link className={styles.link} href="/">
+        <a
+          className={styles.link}
+          href="https://portal.thirdweb.com/auth"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Auth
-        </Link>
+        </a>
         .{" "}
       </p>
 
@@ -89,6 +87,13 @@ export async function getServerSideProps(context) {
     };
   }
 
+  const secretKey = process.env.TW_SECRET_KEY;
+
+  if (!secretKey) {
+    console.log("Missing env var: TW_SECRET_KEY");
+    throw new Error("Missing env var: TW_SECRET_KEY");
+  }
+
   // Ensure we are able to generate an auth token using our private key instantiated SDK
   const PRIVATE_KEY = process.env.THIRDWEB_AUTH_PRIVATE_KEY;
   if (!PRIVATE_KEY) {
@@ -99,9 +104,7 @@ export async function getServerSideProps(context) {
   const sdk = ThirdwebSDK.fromPrivateKey(
     process.env.THIRDWEB_AUTH_PRIVATE_KEY,
     "mumbai",
-    {
-      secretKey: process.env.TW_SECRET_KEY,
-    }
+    { secretKey }
   );
 
   // Check to see if the user has an NFT

@@ -23,9 +23,14 @@ export default function Login() {
       <p className={styles.explain}>
         Serve exclusive content to users who own an NFT from <br />
         your collection, using{" "}
-        <Link className={styles.link} href="/">
+        <a
+          className={styles.link}
+          href="https://portal.thirdweb.com/auth"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Auth
-        </Link>
+        </a>
         .{" "}
       </p>
 
