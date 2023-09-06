@@ -6,7 +6,6 @@ import {
   useUser,
 } from "@thirdweb-dev/react";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { getUser } from "../../auth.config";
