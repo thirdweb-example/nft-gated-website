@@ -24,7 +24,6 @@ export default function Login() {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("nfts", nfts);
     if (nfts?.length) {
       router.push("/");
     }
