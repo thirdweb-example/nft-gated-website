@@ -37,7 +37,6 @@ body {
   color: var(--white);
   display: flex;
   margin: 0;
-  text-align: center;
 }
 
 h2 {
