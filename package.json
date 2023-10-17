@@ -9,10 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@thirdweb-dev/auth": "^3",
-    "@thirdweb-dev/react": "^3",
-    "@thirdweb-dev/sdk": "^3",
-    "ethers": "^5.6.8",
+    "@thirdweb-dev/auth": "^4",
+    "@thirdweb-dev/react": "^4",
+    "@thirdweb-dev/sdk": "^4",
+    "ethers": "^5",
     "next": "^13",
     "react": "^18.2",
     "react-dom": "^18.2"
