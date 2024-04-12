@@ -1,3 +1,10 @@
+> [!Important]  
+> This repository is referencing the `mumbai` chain.
+> 
+> `Mumbai` [is deprecated since 08/04/2024](https://blog.thirdweb.com/deprecation-of-mumbai-testnet/), meaning the code in this repository will no longer work out of the box.
+>
+> You can still use this repository, however you will have to switch any references to `mumbai` to another chain.
+
 # Token Gated Website
 
 This project demonstrates how you can restrict content on your website to only those users who own a token of your choice (any ERC-20, ERC-721 or ERC-1155).
